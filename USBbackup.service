@@ -1,0 +1,15 @@
+[Unit]
+Description=Surveillance des médias USB pour sauvegarde automatique
+After=default.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/bash "%h/.local/bin/USBbackup.sh"
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
+
