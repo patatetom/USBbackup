@@ -58,17 +58,7 @@ If you prefer to use borg or rsync, you must modify the USBbackup configuration.
 - Edit the file `/home/me/.local/bin/USBbackup@.sh`
 - Choose the module to use by uncommenting the corresponding line
 
-`tar` (default) :
-```bash
-# uncomment to use tar as backup solution
-source ~/.local/bin/USBbackup.tar.sh
-# uncomment to use borg as backup solution
-#source ~/.local/bin/USBbackup.borg.sh
-# uncomment to use rsync as backup solution
-#source ~/.local/bin/USBbackup.rsync.sh
-```
-
-`borg` :
+USBbackup with `borg` :
 ```bash
 # uncomment to use tar as backup solution
 #source ~/.local/bin/USBbackup.tar.sh
@@ -78,7 +68,7 @@ source ~/.local/bin/USBbackup.borg.sh
 #source ~/.local/bin/USBbackup.rsync.sh
 ```
 
-`rsync` :
+USBbackup with `rsync` :
 ```bash
 # uncomment to use tar as backup solution
 #source ~/.local/bin/USBbackup.tar.sh
@@ -87,3 +77,5 @@ source ~/.local/bin/USBbackup.borg.sh
 # uncomment to use rsync as backup solution
 source ~/.local/bin/USBbackup.rsync.sh
 ```
+
+> Using multiple modules is entirely possible but will necessarily require more time and more space on your USB media.
