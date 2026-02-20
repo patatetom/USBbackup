@@ -29,7 +29,7 @@ target=to-be-unset-by-selected-module
 
 ################################################################################
 # uncomment to use tar as backup solution
-#source ~/.local/bin/USBbackup.tar.sh
+source ~/.local/bin/USBbackup.tar.sh
 
 
 # uncomment to use borg as backup solution
