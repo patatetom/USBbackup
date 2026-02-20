@@ -1,0 +1,14 @@
+[Unit]
+Description=Sauvegarde sur média USB
+After=default.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash "%h/.local/bin/USBbackup@.sh" "%i"
+StandardOutput=journal
+StandardError=journal
+TimeoutStartSec=6h
+
+[Install]
+WantedBy=default.target
+
