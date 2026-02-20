@@ -1,13 +1,13 @@
 #!/usr/bin/bash
 
 
-# ce module (script) borg est destiné au script USBbackup@.sh
-# la restauration d'une sauvegarde peut être réalisée à partir de borg (CLI)
-# ou à partir de l'une des nombreuses interfaces graphiques pour borg :
+# this borg module (script) is intended for the USBbackup@.sh script
+# a backup can be restored using borg (CLI)
+# or using one of the many GUI frontends for borg:
 # https://github.com/loomi-labs/arco
 # https://github.com/karanhudia/borg-ui
 # https://github.com/borgbase/vorta
-# !! le dépôt borg (les sauvegardes) n'est pas chiffré !!
+# !! the borg repository (the backups) is NOT encrypted !!
 
 
 target="$backup/borg/$HOSTNAME/$USER"
@@ -17,43 +17,43 @@ export BORG_EXIT_CODES=modern
 export BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK=yes
 
 
-# création du dossier cible et test d'écriture
+# create target directory and test write access
 mkdir -p "$target"
 ! touch "$target/.test" &&
 	notify-send \
 		--urgency=critical \
-		--app-name="Sauvegarde borg des données personnelles" \
+		--app-name="Personal data borg backup" \
 		--app-icon=error \
-		"🔴 Impossible d'écrire dans le dossier dédié du média USB." &&
+		"🔴 Cannot write to the dedicated folder on the USB media." &&
 		exit 1
 rm "$target/.test"
 
 
-# initialisation borg
+# borg initialization
 borg init --encryption none "$target"
 case $? in
 	0|10) ;;
 	*)
 	notify-send \
 		--urgency=critical \
-		--app-name="Sauvegarde borg des données personnelles" \
+		--app-name="Personal data borg backup" \
 		--app-icon=error \
-		"🔴 Une erreur est survenue lors de l'initialisation." &&
+		"🔴 An error occurred during initialization." &&
 		exit 1 ;;
 esac
 
 
-# sauvegarde
+# backup
 notify-send \
 	--urgency=normal \
-	--app-name="Sauvegarde borg des données personnelles" \
+	--app-name="Personal data borg backup" \
 	--app-icon=backup \
-	"Démarrage de la sauvegarde (1/4)..."
-# recherche dans le home de l'utilisateur tous les fichiers de moins de 1Go*
-# exclusion de certains dossiers non souhaités (cache, poubelle, etc...)
-# puis sauvegarde avec borg à partir des noms de fichiers spécifiés
-# la taille limite peut être modifiée au niveau du find (-1Go*)
-# d'autres exclusions peuvent être ajoutées au niveau du grep (-e ...)
+	"Starting backup (1/4)..."
+# search the user's home for all files smaller than 1GB*
+# exclude certain unwanted directories (cache, trash, etc...)
+# then back up with borg from the specified file list
+# the size limit can be changed in the find command (-1GB*)
+# additional exclusions can be added in the grep (-e ...)
 set -o pipefail
 find ~ -type f -size -$((1024*1024*1024))c |
 grep -v \
@@ -63,60 +63,60 @@ borg create --compression zstd --paths-from-stdin "$target::{now:%Y%m%d%H%M}"
 (( $? != 0 )) &&
 	notify-send \
 		--urgency=critical \
-		--app-name="Sauvegarde borg des données personnelles" \
+		--app-name="Personal data borg backup" \
 		--app-icon=error \
-		"🔴 Une erreur est survenue lors de la sauvegarde." &&
+		"🔴 An error occurred during the backup." &&
 		exit 1
 
 
-# purge des sauvegardes (conservation des 5 dernières)
+# prune old backups (keep the last 5)
 notify-send \
 	--urgency=normal \
-	--app-name="Sauvegarde borg des données personnelles" \
+	--app-name="Personal data borg backup" \
 	--app-icon=backup \
-	"Nettoyage de la sauvegarde (2/4)..."
+	"Cleaning backups (2/4)..."
 ! borg prune --keep-last=5 "$target" &&
 	notify-send \
 		--urgency=normal \
-		--app-name="Sauvegarde borg des données personnelles" \
+		--app-name="Personal data borg backup" \
 		--app-icon=error \
-		"🟠 Un problème est survenu lors du nettoyage."
+		"🟠 A problem occurred during cleanup."
 
 
-# compactage du dépôt (récupération d'espace)
+# compact the repository (reclaim space)
 notify-send \
 	--urgency=normal \
-	--app-name="Sauvegarde borg des données personnelles" \
+	--app-name="Personal data borg backup" \
 	--app-icon=backup \
-	"Compactage de la sauvegarde (3/4)..."
+	"Compacting backups (3/4)..."
 ! borg compact "$target" &&
 	notify-send \
 		--urgency=normal \
-		--app-name="Sauvegarde borg des données personnelles" \
+		--app-name="Personal data borg backup" \
 		--app-icon=error \
-		"🟠 Un problème est survenu lors du compactage."
+		"🟠 A problem occurred during compacting."
 
 
-# vérification du dépôt
+# verify the repository
 notify-send \
 	--urgency=normal \
-	--app-name="Sauvegarde borg des données personnelles" \
+	--app-name="Personal data borg backup" \
 	--app-icon=backup \
-	"Vérification de la sauvegarde (4/4)..."
+	"Verifying backup (4/4)..."
 ! borg check "$target" &&
 	notify-send \
 		--urgency=critical \
-		--app-name="Sauvegarde borg des données personnelles" \
+		--app-name="Personal data borg backup" \
 		--app-icon=error \
-		"🔴 Une erreur est survenue lors de la vérification." &&
+		"🔴 An error occurred during verification." &&
 		exit 1
 
 
-# abandon de la variable target (cf. USBbackup@.sh)
+# unset the target variable (see USBbackup@.sh)
 unset target
 notify-send \
 	--urgency=normal \
-	--app-name="Sauvegarde borg des données personnelles" \
+	--app-name="Personal data borg backup" \
 	--app-icon=success \
-	"✅ Sauvegarde borg terminée avec succès."
+	"✅ Borg backup completed successfully."
 
