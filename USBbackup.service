@@ -1,5 +1,5 @@
 [Unit]
-Description=Surveillance des médias USB pour sauvegarde automatique
+Description=USB media watcher for automatic backup
 After=default.target
 
 [Service]
