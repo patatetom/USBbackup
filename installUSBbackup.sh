@@ -2,46 +2,46 @@
 
 # message
 echo
-echo "ce script va installer USBbackup dans votre environnement si toutes les conditions requises sont présentes."
-read -sp "appuyer sur [Entrer] pour continuer ou [Ctrl]-[C] pour annuler"$'\n'
+echo "This script will install USBbackup into your environment if all required conditions are met."
+read -sp "Press [Enter] to continue or [Ctrl]-[C] to cancel"$'\n'
 echo
 
 # systemd
 [[ ! "$( ps -p 1 -o comm= 2> /dev/null )" == "systemd" ]] &&
-	echo "🔴 systemd n'est pas l'INIT du système" > /dev/stderr &&
+	echo "🔴 systemd is not the system's INIT" > /dev/stderr &&
 		exit 1
 echo "✅ systemd"
 
 # udisk2
 ! type -a udisksctl &> /dev/null &&
-	echo "🟠 udisk2 est absent et doit être installé" > /dev/stderr &&
+	echo "🟠 udisks2 is missing and must be installed" > /dev/stderr &&
 		exit 2
 ! systemctl is-active udisks2 &> /dev/null &&
-	echo "🟡 udisk2 est présent mais n'est pas opérationnel" > /dev/stderr &&
+	echo "🟡 udisks2 is present but not operational" > /dev/stderr &&
 		exit 3
-echo "✅ udisk2"
+echo "✅ udisks2"
 
 # zstd
 ! type -a zstd &> /dev/null &&
-	echo "🟠 zstd est absent et doit être installé" > /dev/stderr &&
+	echo "🟠 zstd is missing and must be installed" > /dev/stderr &&
 		exit 2
 echo "✅ zstd"
 
 # base64 (coreutils)
 ! type -a base64 &> /dev/null &&
-	echo "🟠 base64 (coreutils) est absent et doit être installé" > /dev/stderr &&
+	echo "🟠 base64 (coreutils) is missing and must be installed" > /dev/stderr &&
 		exit 2
 echo "✅ base64"
 
 # inotifywait (inotify-tools)
 ! type -a inotifywait &> /dev/null &&
-	echo "🟠 inotifywait (inotify-tools) est absent et doit être installé" > /dev/stderr &&
+	echo "🟠 inotifywait (inotify-tools) is missing and must be installed" > /dev/stderr &&
 		exit 2
 echo "✅ inotifywait"
 
 # notify-send (libnotify-bin)
 ! type -a inotifywait &> /dev/null &&
-	echo "🟠 notify-send (libnotify-bin) est absent et doit être installé" > /dev/stderr &&
+	echo "🟠 notify-send (libnotify-bin) is missing and must be installed" > /dev/stderr &&
 		exit 2
 echo "✅ notify-send"
 
@@ -49,29 +49,29 @@ echo "✅ notify-send"
 # tar
 type -a tar &> /dev/null &&
 	echo "✅ tar" && ((m++)) ||
-	echo "🟡 tar est absent et doit être installé si utilisé" > /dev/stderr
+	echo "🟡 tar is missing and must be installed if used" > /dev/stderr
 
 # borg (borgbackup)
 type -a borg &> /dev/null &&
 	echo "✅ borg" && ((m++)) ||
-	echo "🟡 borg (borgbackup) est absent et doit être installé si utilisé" > /dev/stderr
+	echo "🟡 borg (borgbackup) is missing and must be installed if used" > /dev/stderr
 
 # rsync
 type -a rsync &> /dev/null &&
 	echo "✅ rsync" && ((m++)) ||
-	echo "🟡 rsync est absent et doit être installé si utilisé" > /dev/stderr
+	echo "🟡 rsync is missing and must be installed if used" > /dev/stderr
 
 (( $m == 0 )) &&
-	echo "🟠 aucun des trois outils nécessaires n'est présent" > /dev/stderr &&
+	echo "🟠 none of the three required tools are present" > /dev/stderr &&
 		exit 2
 
 # message
 echo
-echo "procéder à l'installation de USBbackup dans votre environnement ?"
-read -sp "appuyer sur [Entrer] pour continuer ou [Ctrl]-[C] pour annuler"$'\n'
+echo "Proceed with installing USBbackup into your environment?"
+read -sp "Press [Enter] to continue or [Ctrl]-[C] to cancel"$'\n'
 echo
 
-echo "copie des fichiers..."
+echo "Copying files..."
 mkdir -p -v ~/.config/systemd/user/
 cp -v ./USBbackup*.service ~/.config/systemd/user/
 chmod -x ~/.config/systemd/user/USBbackup*.service
@@ -80,9 +80,8 @@ cp -v ./USBbackup*.sh ~/.local/bin/
 chmod -x ~/.local/bin/USBbackup*.sh
 echo
 
-echo "installation et démarrage du service..."
+echo "Installing and starting the service..."
 systemctl --user --verbose daemon-reload
 systemctl --user --verbose enable USBbackup
 systemctl --user --verbose start --now USBbackup
 echo
-
