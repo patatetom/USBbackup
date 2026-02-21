@@ -24,6 +24,7 @@ rm "$target/.test"
 
 
 # tar backup
+# TODO check target fs to split or not
 notify-send \
 	--urgency=normal \
 	--app-name="Personal data tar backup" \
