@@ -91,7 +91,13 @@ The backup is stored in `/USBbackup/{Type}/{HostName}/{User}/`.
 
 
 
-## Tar backup
+## `tar` backup
+
+The `tar` backup, which is the default backup, is the simplest to implement since everything needed to perform it should be natively present in Linux.
+Its main drawback is that it systematically backs up all data (no delta).
+The `tar` backup is perfect for a small volume of data to be backed up.
+
+> Given FAT32, the archive is split into 4GB chunks.
 
 
 
