@@ -111,7 +111,13 @@ If the first backup is complete, subsequent backups are significantly faster.
 
 
 
-## Rsync backup
+## `rsync` backup
+
+`rsync`, originally intended for remote synchronization, is also an excellent backup software.
+Like `borg`, once the first backup is complete, `rsync` only backs up the differences that have appeared.
+Unlike `tar` and `borg`, `rsync` does not use a container to store files that can be naturally retrieved from the USB media used for backup.
+
+> Unlike `tar` and `borg`, which compress (`zstd`) processed data and save space, `rsync`, based on synchronization, does not use any compression.
 
 
 
