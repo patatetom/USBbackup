@@ -97,6 +97,7 @@ The `tar` backup, which is the default backup, is the simplest to implement sinc
 Its main drawback is that it systematically backs up all data (no delta).
 The `tar` backup is perfect for a small volume of data to be backed up.
 
+> Files larger than 1 GB and the `~/.cache/` and `~/.local/share/` folders are excluded from the backup.<br/>
 > Given FAT32, the archive (tarball) is split into 4GB chunks.
 
 
@@ -107,6 +108,7 @@ The `tar` backup is perfect for a small volume of data to be backed up.
 Unlike `tar`, `borg` uses deduplication, which avoids retransferring all the data to be backed up : only changes since the last backup are backed up.
 If the first backup is complete, subsequent backups are significantly faster.
 
+> Files larger than 1 GB and the `~/.cache/` and `~/.local/share/` folders are excluded from the backup.<br/>
 > `borg` is configured to keep the last 5 backups.
 
 
@@ -115,9 +117,9 @@ If the first backup is complete, subsequent backups are significantly faster.
 
 `rsync`, originally intended for remote synchronization, is also an excellent backup software.
 Like `borg`, once the first backup is complete, `rsync` only backs up the differences that have appeared.
-Unlike `tar` and `borg`, `rsync` does not use a container to store files that can be naturally retrieved from the USB media used for backup.
+Unlike `tar` and `borg`, `rsync` does not use a compressed container to store files that can be naturally retrieved from the USB media used for backup.
 
-> Unlike `tar` and `borg`, which compress (`zstd`) processed data and save space, `rsync`, based on synchronization, does not use any compression.
+> Files larger than 1 GB and the `~/.cache/` and `~/.local/share/` folders are excluded from the backup.<br/>
 
 
 
