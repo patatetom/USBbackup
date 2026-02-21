@@ -97,11 +97,17 @@ The `tar` backup, which is the default backup, is the simplest to implement sinc
 Its main drawback is that it systematically backs up all data (no delta).
 The `tar` backup is perfect for a small volume of data to be backed up.
 
-> Given FAT32, the archive is split into 4GB chunks.
+> Given FAT32, the archive (tarball) is split into 4GB chunks.
 
 
 
-## Borg backup
+## `borg` backup
+
+`borg` is an excellent backup software developed in Python.
+Unlike `tar`, `borg` uses deduplication, which avoids retransferring all the data to be backed up : only changes since the last backup are backed up.
+If the first backup is complete, subsequent backups are significantly faster.
+
+> `borg` is configured to keep the last 5 backups.
 
 
 
