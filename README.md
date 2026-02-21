@@ -79,3 +79,29 @@ source ~/.local/bin/USBbackup.rsync.sh
 ```
 
 > Using multiple modules is entirely possible but will necessarily require more time and more space on your USB media.
+
+
+
+## Multiple users
+
+USBbackup can/must be installed for each user of the workstation who wishes to back up their personal folder.
+The backup is stored in `/USBbackup/{Type}/{HostName}/{User}/`.
+
+> Unless they are revisited, the provided `tar`, `borg`, and `rsync` backups are not encrypted or protected.
+
+
+
+## Tar backup
+
+
+
+## Borg backup
+
+
+
+## Rsync backup
+
+
+
+## Etc… backup
+
