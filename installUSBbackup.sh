@@ -40,7 +40,7 @@ echo "✅ base64"
 echo "✅ inotifywait"
 
 # notify-send (libnotify-bin)
-! type -a inotifywait &> /dev/null &&
+! type -a notify-send &> /dev/null &&
 	echo "🟠 notify-send (libnotify-bin) is missing and must be installed" > /dev/stderr &&
 		exit 2
 echo "✅ notify-send"
