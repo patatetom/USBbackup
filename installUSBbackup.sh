@@ -68,7 +68,7 @@ type -a rsync &>/dev/null &&
 		flag="x" ||
 	echo "🟡 rsync is missing and must be installed if used" >&2
 
-[ -z "${flag}" ]] &&
+[[ -z "${flag}" ]] &&
 	echo "🟠 none of the three required tools are present" >&2 &&
 		exit 2
 
