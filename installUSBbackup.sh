@@ -41,7 +41,11 @@ echo "✅ inotifywait"
 # notify-send (libnotify-bin)
 ! type -a notify-send &>/dev/null &&
 	die "🟠 notify-send (libnotify-bin) is missing and must be installed" 2
-echo "✅ notify-send"
+notify=$( notify-send --version | grep -E -o '[0-9.]+$' )
+version=$( sort -V <<< "$notify"$'\n'"0.7.10" | head -1 )
+[[ "$notify" == "$version" ]] &&
+	echo "🟡 notify-send (<0.7.11 2022)" ||
+	echo "✅ notify-send"
 
 flag=""
 
@@ -49,19 +53,19 @@ flag=""
 type -a tar &>/dev/null &&
 	echo "✅ tar" &&
 		flag="x" ||
-	echo "🟡 tar is missing and must be installed if used" >&2
+	echo "🟡 tar is missing and must be installed if used"
 
 # borg (borgbackup)
 type -a borg &>/dev/null &&
 	echo "✅ borg" &&
 		flag="x" ||
-	echo "🟡 borg (borgbackup) is missing and must be installed if used" >&2
+	echo "🟡 borg (borgbackup) is missing and must be installed if used"
 
 # rsync
 type -a rsync &>/dev/null &&
 	echo "✅ rsync" &&
 		flag="x" ||
-	echo "🟡 rsync is missing and must be installed if used" >&2
+	echo "🟡 rsync is missing and must be installed if used"
 
 [[ -z "${flag}" ]] &&
 	die "🟠 none of the three required tools are present" 2
@@ -88,3 +92,6 @@ systemctl --user daemon-reload
 systemctl --user enable USBbackup
 systemctl --user start --now USBbackup
 echo
+
+[[ "$notify" == "$version" ]] &&
+sed -i '/^[[:space:]]*--action="/d' ~/.local/bin/USBbackup@.sh
