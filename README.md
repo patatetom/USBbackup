@@ -35,14 +35,6 @@ Proceed with installing USBbackup into your environment ?
 Press [Enter] to continue or [Ctrl]-[C] to cancel
 
 Copying files...
-'./USBbackup.service' -> '/home/me/.config/systemd/user/USBbackup.service'
-'./USBbackup@.service' -> '/home/me/.config/systemd/user/USBbackup@.service'
-'./USBbackup.borg.sh' -> '/home/me/.local/bin/USBbackup.borg.sh'
-'./USBbackup.rsync.sh' -> '/home/me/.local/bin/USBbackup.rsync.sh'
-'./USBbackup.sh' -> '/home/me/.local/bin/USBbackup.sh'
-'./USBbackup@.sh' -> '/home/me/.local/bin/USBbackup@.sh'
-'./USBbackup.tar.sh' -> '/home/me/.local/bin/USBbackup.tar.sh'
-
 Installing and starting the service...
 ```
 
