@@ -16,7 +16,6 @@ backup=$( base64 -d <<< "$1")
 	notify-send \
 		--urgency=critical \
 		--app-name="Personal data backup" \
-		--app-icon=backup \
 		--action="I understand" \
 		--action="Cancel backup" \
 		"⚠️ THE USB MEDIA MUST NOT BE UNPLUGGED during the backup operation."
@@ -46,7 +45,6 @@ source ~/.local/bin/USBbackup.tar.sh
 	notify-send \
 		--urgency=critical \
 		--app-name="Personal data backup" \
-		--app-icon=backup \
 		"🔴 No backup module is defined." &&
 		exit 1
 
