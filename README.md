@@ -38,20 +38,18 @@ Copying files...
 Installing and starting the service...
 ```
 
-> `tar` (default backup solution) should be available on your system : if not, install it.<br/>
+> `tar` (default backup solution) should be available on your system.<br/>
 > `borg` or `rsync` will probably need to be installed if you want to use it.
 
 
 
 ## 🧩 Missing tools
 
-Here are the commands that should allow you to install the missing tools on the three main Linux distributions.
-The command must be preceded by `sudo` in order to temporarily elevate your privileges.
+Here are the commands that should allow to install the missing tools on the three main Linux distributions and their derivatives.
+The command must be preceded by `sudo` in order to temporarily elevate privileges.
 
 |                 | Debian                    | Fedora                    | OpenSuse                       |
 |-----------------|---------------------------|---------------------------|--------------------------------|
-| **zstd**        | apt install zstd          | dnf install zstd          | zypper install zstd            |
-| **base64**      | apt install coreutils     | dnf install coreutils     | zypper install coreutils       |
 | **inotifywait** | apt install inotify-tools | dnf install inotify-tools | zypper install inotify-tools   |
 | **notify-send** | apt install libnotify-bin | dnf install libnotify     | zypper install libnotify-tools |
 | **borg**        | apt install borgbackup    | dnf install borgbackup    | zypper install borgbackup      |
@@ -94,7 +92,7 @@ source ~/.local/bin/USBbackup.rsync.sh
 
 ## 👧🧑 Multiple users
 
-USBbackup can/must be installed for each user of the workstation who wishes to back up their personal folder.
+USBbackup must be installed for each user of the workstation who wishes to back up their personal folder.
 The backup is stored in `/USBbackup/{Type}/{HostName}/{User}/`.
 
 > Unless they are revisited, the provided `tar`, `borg`, and `rsync` backups are not encrypted or protected.
