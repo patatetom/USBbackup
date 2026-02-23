@@ -81,6 +81,8 @@ cp -v ./USBbackup*.sh ~/.local/bin/
 chmod -x ~/.local/bin/USBbackup*.sh
 echo
 
+# TODO set default backup solution with flag...
+
 echo "Installing and starting the service..."
 systemctl --user daemon-reload
 systemctl --user enable USBbackup
