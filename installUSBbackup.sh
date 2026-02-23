@@ -41,9 +41,10 @@ echo "✅ inotifywait"
 # notify-send (libnotify-bin)
 ! type -a notify-send &>/dev/null &&
 	die "🟠 notify-send (libnotify-bin) is missing and must be installed" 2
-notify=$( notify-send --version | grep -E -o '[0-9.]+$' )
-version=$( sort -V <<< "$notify"$'\n'"0.7.10" | head -1 )
-[[ "$notify" == "$version" ]] &&
+# check notify-send version against 0.7.11
+IFS='.' read x y z <<< $( notify-send --version | grep -E -o '[0-9]+\.[0-9]+\.[0-9]+' )
+version=$(( 10#${x:-0} * 10000 + 10#${y:-0} * 100 + 10#${z:-0} ))
+(( version < 711 )) &&
 	echo "🟡 notify-send (<0.7.11 2022)" ||
 	echo "✅ notify-send"
 
@@ -76,6 +77,7 @@ echo "Proceed with installing USBbackup into your environment?"
 read -rsp "Press [Enter] to continue or [Ctrl]-[C] to cancel"$'\n'
 echo
 
+# install files
 echo "Copying files..."
 mkdir -p -v ~/.config/systemd/user/
 cp -v ./USBbackup*.service ~/.config/systemd/user/
@@ -87,11 +89,13 @@ echo
 
 # TODO set default backup solution with flag...
 
+# install user service
 echo "Installing and starting the service..."
 systemctl --user daemon-reload
 systemctl --user enable USBbackup
 systemctl --user start --now USBbackup
 echo
 
-[[ "$notify" == "$version" ]] &&
+# remove `action` option if notify-send < 0.7.11
+(( version < 711 )) &&
 sed -i '/^[[:space:]]*--action="/d' ~/.local/bin/USBbackup@.sh
