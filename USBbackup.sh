@@ -1,44 +1,47 @@
 #!/usr/bin/bash
 
-# the /run/media/$USER directory does not exist before the first USB insertion
-# the while [ ! -d "/run/media/$USER" ] loop misses creation of the subdirectory
+# /run/media/$USER or /media/$USER directory does not exist before first USB insertion
 # the hack is to mount/unmount a 90Kb empty pseudo-floppy
-# this hack is performed at user login
-if [ ! -d "/run/media/$USER" ]
-then
-	floppy=$( mktemp )
-	zstd -d > "$floppy" < <(
-		base64 -d <<-++++
-			KLUv/QRY3QMAtAXrPJBta2ZzLmZhdAACBAEAAgACsAD4AQAQAAIAgAApVjn/pVhGQVQxMiAgIA4f
-			vlt8rCLAdAtWtA67BwDNEF7r8DLkzRbNGev+AFWq+P//AFhYCAAAqalQXFBcCQDoXyAHfAyyAivY
-			rctF9A8QKsgHavEnUA9AzgucgADLHA
-			++++
-	) 
-	if [ ! -d "/run/media/$USER" ]
-	then
-		udisksctl loop-setup -rf "$floppy" &&
-			sleep 2 &&
-				umount "$floppy"
-	fi
-	rm "$floppy"
-fi
+# this hack is performed once at user login
+floppy=$( mktemp )
+zstd -d > "$floppy" < <(
+	base64 -d <<-++++
+		KLUv/QRY3QMAtAXrPJBta2ZzLmZhdAACBAEAAgACsAD4AQAQAAIAgAApVjn/pVhGQVQxMiAgIA4f
+		vlt8rCLAdAtWtA67BwDNEF7r8DLkzRbNGev+AFWq+P//AFhYCAAAqalQXFBcCQDoXyAHfAyyAivY
+		rctF9A8QKsgHavEnUA9AzgucgADLHA
+		++++
+)
+# udisksctl returns something like "Mapped file /tmp/tmp.drYrUsTIyf as /dev/loop0."
+loop=$(
+	udisksctl loop-setup -r -f "$floppy" |
+	grep -E -o '/dev/loop[0-9]+'
+)
+# udisksctl returns something like "Mounted /dev/loop0 at /run/media/user/..."
+[ -n "$loop" ] &&
+	udisk=$(
+		udisksctl mount -o ro -b "$loop" |
+		grep -E -o "/[^ ]+/$USER"
+	)
+[ -n "$udisk" ] &&
+	udisksctl unmount -b "$loop"
+[ -n "$loop" ] &&
+	udisksctl loop-delete -b "$loop"
 
 # exit if the user directory is missing
-# previous udisks step failed
-[ ! -d "/run/media/$USER" ] &&
-	echo "" > /dev/stderr
+[ -z "$udisk" ] &&
+	echo "unable to find mount point for user USB media" >&2 &&
+		exit 1
 
 # subdirectory intended for backups
 # TODO emojis in the folder name...
 repository=USBbackup
 
 # monitor the user directory
-inotifywait -m "/run/media/$USER" |
+inotifywait -m "$udisk" |
 	while read -r path event item
 	do
 		if [[ "$event" == "CREATE,ISDIR" ]]
-		# USB media inserted
-		# a new directory is created in /run/media/$USER
+		# USB media inserted : new directory created in followed folder
 		then
 			# normalize the mount point
 			mount=$( readlink --canonicalize-missing "$path/$item" )
