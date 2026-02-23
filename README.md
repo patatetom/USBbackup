@@ -8,7 +8,7 @@ once properly installed, any USB media with a folder named `/USBbackup/` at the 
 
 ## Installation
 
-- [Download](https://github.com/patatetom/USBbackup/archive/refs/heads/main.zip) the USBbackup ZIP archive (or by using the green `<> Code v` button above)
+- [Download](https://github.com/patatetom/USBbackup/archive/refs/heads/main.zip) the USBbackup ZIP archive
 - Extract the contents of the archive
 - Navigate to the `USBbackup_main/` folder created by the extraction
 - _Check the code_
