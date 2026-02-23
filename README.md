@@ -43,7 +43,21 @@ Installing and starting the service...
 
 
 
-## 🧩 Missing parts
+## 🧩 Missing tools
+
+Here are the commands that should allow you to install the missing tools on the three main Linux distributions.
+The command must be preceded by `sudo` in order to temporarily elevate your privileges.
+
+|                 | Debian                    | Fedora                    | OpenSuse                       |
+|-----------------|---------------------------|---------------------------|--------------------------------|
+| **zstd**        | apt install zstd          | dnf install zstd          | zypper install zstd            |
+| **base64**      | apt install coreutils     | dnf install coreutils     | zypper install coreutils       |
+| **inotifywait** | apt install inotify-tools | dnf install inotify-tools | zypper install inotify-tools   |
+| **notify-send** | apt install libnotify-bin | dnf install libnotify     | zypper install libnotify-tools |
+| **borg**        | apt install borgbackup    | dnf install borgbackup    | zypper install borgbackup      |
+| **rsync**       | apt install rsync         | dnf install rsync         | zypper install rsync           |
+
+> `notify-send` must be version 0.7.11 or higher to take advantage of the `action` option, which allows the user to cancel the backup.
 
 
 
