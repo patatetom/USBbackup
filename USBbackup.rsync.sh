@@ -14,7 +14,6 @@ mkdir -p "$target"
 	notify-send \
 		--urgency=critical \
 		--app-name="Personal data rsync backup" \
-		--app-icon=error \
 		"🔴 Cannot write to the dedicated folder on the USB media." &&
 		exit 1
 rm "$target/.test"
@@ -24,7 +23,6 @@ rm "$target/.test"
 notify-send \
 	--urgency=normal \
 	--app-name="Personal data rsync backup" \
-	--app-icon=backup \
 	"Starting backup..."
 # synchronize from the user's home all files smaller than 1GB
 # excluding certain unwanted directories (cache, trash, etc...)
@@ -44,7 +42,6 @@ rsync \
 	notify-send \
 		--urgency=critical \
 		--app-name="Personal data rsync backup" \
-		--app-icon=error \
 		"🔴 An error occurred during the backup." &&
 		exit 1
 
@@ -54,6 +51,5 @@ unset target
 notify-send \
 	--urgency=normal \
 	--app-name="Personal data rsync backup" \
-	--app-icon=success \
 	"✅ Rsync backup completed successfully."
 
