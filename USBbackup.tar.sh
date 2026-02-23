@@ -17,7 +17,6 @@ mkdir -p "$target"
 	notify-send \
 		--urgency=critical \
 		--app-name="Personal data tar backup" \
-		--app-icon=error \
 		"🔴 Cannot write to the dedicated folder on the USB media." &&
 		exit 1
 rm "$target/.test"
@@ -28,7 +27,6 @@ rm "$target/.test"
 notify-send \
 	--urgency=normal \
 	--app-name="Personal data tar backup" \
-	--app-icon=backup \
 	"Starting backup (1/2)..."
 # search the user's home for all files smaller than 1GB*
 # and print their names terminated with a null character
@@ -48,7 +46,6 @@ split -d -a 4 -b 4G - "$target/USBbackup.tar.zst-"
 	notify-send \
 		--urgency=critical \
 		--app-name="Personal data tar backup" \
-		--app-icon=error \
 		"🔴 An error occurred during the backup." &&
 		exit 1
 
@@ -62,7 +59,6 @@ split -d -a 4 -b 4G - "$target/USBbackup.tar.zst-"
 	notify-send \
 		--urgency=normal \
 		--app-name="Personal data tar backup" \
-		--app-icon=error \
 		"🟠 A problem occurred during cleanup."
 
 
@@ -79,7 +75,6 @@ tar --zstd -t > /dev/null
 	notify-send \
 		--urgency=critical \
 		--app-name="Personal data tar backup" \
-		--app-icon=error \
 		"🔴 An error occurred during verification." &&
 		exit 1
 
@@ -89,6 +84,5 @@ unset target
 notify-send \
 	--urgency=normal \
 	--app-name="Personal data tar backup" \
-	--app-icon=success \
 	"✅ Tar backup completed successfully."
 
