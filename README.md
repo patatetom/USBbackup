@@ -1,4 +1,4 @@
-# USBbackup : plug ⏬ && backup 🔁
+# 🍀 USBbackup : plug ⏬ && backup 🔁
 **Simple backup solution on USB media**
 
 USBbackup is a Linux `systemd` backup solution entirely in user space :
@@ -6,7 +6,7 @@ once properly installed, any USB media with a folder named `/USBbackup/` at the 
 
 
 
-## Installation
+## 📎 Installation
 
 - [Download](https://github.com/patatetom/USBbackup/archive/refs/heads/main.zip) the USBbackup ZIP archive
 - Extract the contents of the archive
@@ -43,7 +43,11 @@ Installing and starting the service...
 
 
 
-## Configuration
+## 🧩 Missing parts
+
+
+
+## ⚙️ Configuration
 
 USBbackup use `tar` by default, but if you prefer to use `borg` or `rsync`, you must modify the USBbackup configuration.
 
@@ -74,7 +78,7 @@ source ~/.local/bin/USBbackup.rsync.sh
 
 
 
-## Multiple users
+## 👧🧑 Multiple users
 
 USBbackup can/must be installed for each user of the workstation who wishes to back up their personal folder.
 The backup is stored in `/USBbackup/{Type}/{HostName}/{User}/`.
@@ -83,7 +87,7 @@ The backup is stored in `/USBbackup/{Type}/{HostName}/{User}/`.
 
 
 
-## `tar` backup
+## 🧰 `tar` backup
 
 The `tar` backup, which is the default backup, is the simplest to implement since everything needed to perform it should be natively present in Linux.
 Its main drawback is that it systematically backs up all data (no delta).
@@ -94,7 +98,7 @@ The `tar` backup is perfect for a small volume of data to be backed up.
 
 
 
-## `borg` backup
+## 📦 `borg` backup
 
 `borg` is an excellent backup software developed in Python.
 Unlike `tar`, `borg` uses deduplication, which avoids retransferring all the data to be backed up : only changes since the last backup are backed up.
@@ -105,7 +109,7 @@ If the first backup is complete, subsequent backups are significantly faster.
 
 
 
-## `rsync` backup
+## 💼 `rsync` backup
 
 `rsync`, originally intended for remote synchronization, is also an excellent backup software.
 Like `borg`, once the first backup is complete, `rsync` only backs up the differences that have appeared.
@@ -115,7 +119,7 @@ Unlike `tar` and `borg`, `rsync` does not use a compressed container to store fi
 
 
 
-## `etc…` backup
+## ⚗️ `etc…` backup
 
 Using the scripts provided as inspiration, you can easily set up your own backup solution based on the tool of your choice.
 You can also modify the script provided for your chosen solution to reconfigure the backup (exclusions, max file size to be considered, etc…).
