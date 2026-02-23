@@ -23,7 +23,6 @@ mkdir -p "$target"
 	notify-send \
 		--urgency=critical \
 		--app-name="Personal data borg backup" \
-		--app-icon=error \
 		"🔴 Cannot write to the dedicated folder on the USB media." &&
 		exit 1
 rm "$target/.test"
@@ -37,7 +36,6 @@ case $? in
 	notify-send \
 		--urgency=critical \
 		--app-name="Personal data borg backup" \
-		--app-icon=error \
 		"🔴 An error occurred during initialization." &&
 		exit 1 ;;
 esac
@@ -47,7 +45,6 @@ esac
 notify-send \
 	--urgency=normal \
 	--app-name="Personal data borg backup" \
-	--app-icon=backup \
 	"Starting backup (1/4)..."
 # search the user's home for all files smaller than 1GB*
 # exclude certain unwanted directories (cache, trash, etc...)
@@ -64,7 +61,6 @@ borg create --compression zstd --paths-from-stdin "$target::{now:%Y%m%d%H%M}"
 	notify-send \
 		--urgency=critical \
 		--app-name="Personal data borg backup" \
-		--app-icon=error \
 		"🔴 An error occurred during the backup." &&
 		exit 1
 
@@ -73,13 +69,11 @@ borg create --compression zstd --paths-from-stdin "$target::{now:%Y%m%d%H%M}"
 notify-send \
 	--urgency=normal \
 	--app-name="Personal data borg backup" \
-	--app-icon=backup \
 	"Cleaning backups (2/4)..."
 ! borg prune --keep-last=5 "$target" &&
 	notify-send \
 		--urgency=normal \
 		--app-name="Personal data borg backup" \
-		--app-icon=error \
 		"🟠 A problem occurred during cleanup."
 
 
@@ -87,13 +81,11 @@ notify-send \
 notify-send \
 	--urgency=normal \
 	--app-name="Personal data borg backup" \
-	--app-icon=backup \
 	"Compacting backups (3/4)..."
 ! borg compact "$target" &&
 	notify-send \
 		--urgency=normal \
 		--app-name="Personal data borg backup" \
-		--app-icon=error \
 		"🟠 A problem occurred during compacting."
 
 
@@ -101,13 +93,11 @@ notify-send \
 notify-send \
 	--urgency=normal \
 	--app-name="Personal data borg backup" \
-	--app-icon=backup \
 	"Verifying backup (4/4)..."
 ! borg check "$target" &&
 	notify-send \
 		--urgency=critical \
 		--app-name="Personal data borg backup" \
-		--app-icon=error \
 		"🔴 An error occurred during verification." &&
 		exit 1
 
@@ -117,6 +107,5 @@ unset target
 notify-send \
 	--urgency=normal \
 	--app-name="Personal data borg backup" \
-	--app-icon=success \
 	"✅ Borg backup completed successfully."
 
