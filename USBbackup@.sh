@@ -3,11 +3,11 @@
 
 # basic check
 [ -z "$1" ] &&
-	echo "$0 requires a parameter" > /dev/stderr &&
+	echo "$0 requires a parameter" >&2 &&
 		exit 1
 backup=$( base64 -d <<< "$1")
 [ ! -d "$backup" ] &&
-	echo "directory $backup does not exist" > /dev/stderr &&
+	echo "directory $backup does not exist" >&2 &&
 		exit 1
 
 
