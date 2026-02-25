@@ -16,18 +16,6 @@ init="$( ps -p 1 -o comm= 2>/dev/null )"
 	die "🔴 systemd is not the system's INIT"
 echo "✅ systemd"
 
-# udisk2
-! type -a udisksctl &>/dev/null &&
-	die "🟠 udisks2 is missing and must be installed" 2
-! systemctl is-active udisks2 &>/dev/null &&
-	die "🟡 udisks2 is present but not operational" 3
-echo "✅ udisks2"
-
-# strings
-! type -a strings &>/dev/null &&
-	die "🟠 strings (binutils) is missing and must be installed" 2
-echo "✅ strings"
-
 # zstd
 ! type -a zstd &>/dev/null &&
 	die "🟠 zstd is missing and must be installed" 2
@@ -37,11 +25,6 @@ echo "✅ zstd"
 ! type -a base64 &>/dev/null &&
 	die "🟠 base64 (coreutils) is missing and must be installed" 2
 echo "✅ base64"
-
-# inotifywait (inotify-tools)
-! type -a inotifywait &>/dev/null &&
-	die "🟠 inotifywait (inotify-tools) is missing and must be installed" 2
-echo "✅ inotifywait"
 
 # notify-send (libnotify-bin)
 ! type -a notify-send &>/dev/null &&
@@ -94,6 +77,10 @@ echo
 
 # TODO set default backup solution with flag...
 
+# remove `action` option if notify-send < 0.7.11
+(( version < 711 )) &&
+sed -i '/^[[:space:]]*--action="/d' ~/.local/bin/USBbackup@.sh
+
 # install user service
 echo "Installing and starting the service..."
 systemctl --user daemon-reload
@@ -101,6 +88,3 @@ systemctl --user enable USBbackup
 systemctl --user start --now USBbackup
 echo
 
-# remove `action` option if notify-send < 0.7.11
-(( version < 711 )) &&
-sed -i '/^[[:space:]]*--action="/d' ~/.local/bin/USBbackup@.sh

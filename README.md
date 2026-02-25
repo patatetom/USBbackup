@@ -6,6 +6,11 @@ once properly installed, any USB media with a folder named `/USBbackup/` at the 
 
 
 
+> _If partition of your USB media selected for USBbackup must remain compatible with other operating systems, choose ExFAT as file system._
+> _Otherwise, choose a journaled file system supported by your distribution._
+
+
+
 ## 📎 Installation
 
 - [Download](https://github.com/patatetom/USBbackup/archive/refs/heads/main.zip) the USBbackup ZIP archive
@@ -22,10 +27,8 @@ This script will install USBbackup into your environment if all required conditi
 Press [Enter] to continue or [Ctrl]-[C] to cancel
 
 ✅ systemd
-✅ udisks2
 ✅ zstd
 ✅ base64
-✅ inotifywait
 ✅ notify-send
 ✅ tar
 🟡 borg (borgbackup) is missing and must be installed if used
@@ -50,12 +53,11 @@ The command must be preceded by `sudo` in order to temporarily elevate privilege
 
 |                 | Debian                    | Fedora                    | OpenSuse                       |
 |-----------------|---------------------------|---------------------------|--------------------------------|
-| **inotifywait** | apt install inotify-tools | dnf install inotify-tools | zypper install inotify-tools   |
 | **notify-send** | apt install libnotify-bin | dnf install libnotify     | zypper install libnotify-tools |
 | **borg**        | apt install borgbackup    | dnf install borgbackup    | zypper install borgbackup      |
 | **rsync**       | apt install rsync         | dnf install rsync         | zypper install rsync           |
 
-> `notify-send` must be version 0.7.11 or higher to take advantage of the `action` option, which allows the user to cancel the backup.
+> `notify-send` must be version 0.7.11 or higher to take advantage of the `action` option, which allows the user to cancel the backup during startup.
 
 
 
@@ -63,26 +65,20 @@ The command must be preceded by `sudo` in order to temporarily elevate privilege
 
 USBbackup use `tar` by default, but if you prefer to use `borg` or `rsync`, you must modify the USBbackup configuration.
 
-- Edit the file `/home/me/.local/bin/USBbackup@.sh`
+- Edit the file `~/.local/bin/USBbackup@.sh` (`$HOME/.local/bin/USBbackup@.sh`)
 - Choose the module to use by uncommenting the corresponding line
 
 USBbackup with `borg` :
 ```bash
-# uncomment to use tar as backup solution
 #source ~/.local/bin/USBbackup.tar.sh
-# uncomment to use borg as backup solution
 source ~/.local/bin/USBbackup.borg.sh
-# uncomment to use rsync as backup solution
 #source ~/.local/bin/USBbackup.rsync.sh
 ```
 
 USBbackup with `rsync` :
 ```bash
-# uncomment to use tar as backup solution
 #source ~/.local/bin/USBbackup.tar.sh
-# uncomment to use borg as backup solution
 #source ~/.local/bin/USBbackup.borg.sh
-# uncomment to use rsync as backup solution
 source ~/.local/bin/USBbackup.rsync.sh
 ```
 
@@ -95,7 +91,7 @@ source ~/.local/bin/USBbackup.rsync.sh
 USBbackup must be installed for each user of the workstation who wishes to back up their personal folder.
 The backup is stored in `/USBbackup/{Type}/{HostName}/{User}/`.
 
-> Unless they are revisited, the provided `tar`, `borg`, and `rsync` backups are not encrypted or protected.
+> **Unless they are revisited, the provided `tar`, `borg`, and `rsync` backups are not encrypted or protected.**
 
 
 
@@ -126,8 +122,9 @@ If the first backup is complete, subsequent backups are significantly faster.
 `rsync`, originally intended for remote synchronization, is also an excellent backup software.
 Like `borg`, once the first backup is complete, `rsync` only backs up the differences that have appeared.
 Unlike `tar` and `borg`, `rsync` does not use a compressed container to store files that can be naturally retrieved from the USB media used for backup.
+**Difference between file systems (HOME vs. USB) can lead to inconsistencies.**
 
-> Files larger than 1 GB and the `~/.cache/` and `~/.local/share/` folders are excluded from the backup.<br/>
+> Files larger than 1 GB and the `~/.cache/` and `~/.local/share/` folders are excluded from the backup.
 
 
 
