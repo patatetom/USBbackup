@@ -88,9 +88,9 @@ source ~/.local/bin/USBbackup.rsync.sh
 ## 👧🧑 Multiple users
 
 USBbackup must be installed for each user of the workstation who wishes to back up their personal folder.
-The backup is stored in `/USBbackup/{Type}/{HostName}/{User}/`.
+The backup is stored in `…/USBbackup/{Type}/{HostName}/{User}/`.
 
-> **The provided `tar`, `borg`, and `rsync` backups are not encrypted or protected.**
+> **Provided `tar`, `borg`, and `rsync` backups are not encrypted or protected.**
 
 
 
