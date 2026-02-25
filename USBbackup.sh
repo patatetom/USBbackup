@@ -19,6 +19,9 @@ udisks="${udisks%/%s}"
 # monitors creation of user folder if necessary (match file also)
 # /run/media/$USER (and may be /media/$USER) directory does not exist before
 # first USB insertion
+# fails first connection of a USB backup medium, which is not acceptable :
+# user should not have to connect, disconnect, and reconnect his USB backup
+# media if he has not previously connected any other USB storage media.
 [ -d "$udisks/$USER" ] ||
 	inotifywait -e create --include "/$USER\$" "$udisks"
 
