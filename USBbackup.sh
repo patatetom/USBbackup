@@ -1,45 +1,32 @@
 #!/usr/bin/bash
 
-# /run/media/$USER (or may be /media/$USER) directory does not exist before
-# first USB insertion : the hack is to mount/unmount an tiny floppy
-# this hack is performed once at user login
-floppy=$( mktemp )
-zstd -d > "$floppy" < \
-<(
-base64 -d <<++++
-KLUv/WQACd0FAAQJ6zyQTVNXSU40LjEAAgEBAAIQAAUA8AEAEgACACnvvq3eVVNCYmFja3VwICBG
-QVQxMiAgIABVqvD///8PAAhBcgBlAGEAZABtAA8Ac2UALgB0AHgAdP////9SRUFETUUgIFRYVCAA
-K8ylWFxYXAAAAgAnaHR0cHM6Ly9naXRodWIuY29tL3BhdGF0ZXRvbS8KDQAFKDjuLnUDITR3BBVI
-wYcrNoJWIJCpYJdj6B8gVHAPVB4vUAMY5AEWnpYM
-++++
-)
-# udisksctl returns something like "Mapped file /tmp/tmp.drYrUsTIyf as /dev/loop0."
-loop=$(
-	udisksctl loop-setup -r -f "$floppy" |
-	grep -E -o '/dev/loop[0-9]+'
-)
-# udisksctl returns something like "Mounted /dev/loop0 at /run/media/user/..."
-[ -n "$loop" ] &&
-	udisk=$(
-		udisksctl mount -o ro -b "$loop" |
-		grep -E -o "/[^ ]+/$USER"
-	)
-[ -n "$udisk" ] &&
-	udisksctl unmount -b "$loop"
-[ -n "$loop" ] &&
-	udisksctl loop-delete -b "$loop"
-
-# exit if the user directory is missing
-[ -z "$udisk" ] &&
-	echo "unable to find mount point for user USB media" >&2 &&
+# get udisks mount location from daemon code
+udisks="$(
+	strings -d "$(
+		ps ax |
+		grep -o '/.*/udisksd$'
+	)" |
+	grep -E -o '(/run)?/media/%s'
+)"
+[ -z "$udisks" ] &&
+	echo "enable to get udisks mount location" >&2 &&
+		exit 1
+udisks="${udisks%/%s}"
+[ ! -d "$udisks" ] &&
+	echo "udisks mount location does not exist" >&2 &&
 		exit 1
 
+# monitors creation of user folder if necessary (match file also)
+# /run/media/$USER (and may be /media/$USER) directory does not exist before
+# first USB insertion
+[ -d "$udisks/$USER" ] ||
+	inotifywait -e create --include "/$USER\$" "$udisks"
+
 # subdirectory intended for backups
-# TODO emojis in the folder name...
 repository=USBbackup
 
 # monitor the user directory
-inotifywait -m "$udisk" |
+inotifywait -m "$udisks/$USER" |
 	while read -r path event item
 	do
 		if [[ "$event" == "CREATE,ISDIR" ]]
