@@ -1,5 +1,5 @@
 # 🍀 USBbackup : plug ⏬ && backup 🔁
-**Simple backup solution on USB storage device**
+**Simple user backup solution on USB storage device**
 
 USBbackup is a Linux `systemd` backup solution entirely in user space :
 once installed, any USB storage device containing a folder named “/USBbackup/” at the root of one of its partitions becomes a backup medium and automatically triggers a backup when inserted into a USB port.
