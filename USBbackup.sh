@@ -1,15 +1,17 @@
 #!/usr/bin/bash
 
-# /run/media/$USER or /media/$USER directory does not exist before first USB insertion
-# the hack is to mount/unmount a 90Kb empty pseudo-floppy
+# /run/media/$USER (or may be /media/$USER) directory does not exist before
+# first USB insertion : the hack is to mount/unmount an tiny floppy
 # this hack is performed once at user login
 floppy=$( mktemp )
-zstd -d > "$floppy" < <(
-	base64 -d <<-++++
-		KLUv/QRY3QMAtAXrPJBta2ZzLmZhdAACBAEAAgACsAD4AQAQAAIAgAApVjn/pVhGQVQxMiAgIA4f
-		vlt8rCLAdAtWtA67BwDNEF7r8DLkzRbNGev+AFWq+P//AFhYCAAAqalQXFBcCQDoXyAHfAyyAivY
-		rctF9A8QKsgHavEnUA9AzgucgADLHA
-		++++
+zstd -d > "$floppy" < \
+<(
+base64 -d <<++++
+KLUv/WQACd0FAAQJ6zyQTVNXSU40LjEAAgEBAAIQAAUA8AEAEgACACnvvq3eVVNCYmFja3VwICBG
+QVQxMiAgIABVqvD///8PAAhBcgBlAGEAZABtAA8Ac2UALgB0AHgAdP////9SRUFETUUgIFRYVCAA
+K8ylWFxYXAAAAgAnaHR0cHM6Ly9naXRodWIuY29tL3BhdGF0ZXRvbS8KDQAFKDjuLnUDITR3BBVI
+wYcrNoJWIJCpYJdj6B8gVHAPVB4vUAMY5AEWnpYM
+++++
 )
 # udisksctl returns something like "Mapped file /tmp/tmp.drYrUsTIyf as /dev/loop0."
 loop=$(
