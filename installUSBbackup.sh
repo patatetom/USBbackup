@@ -23,6 +23,11 @@ echo "✅ systemd"
 	die "🟡 udisks2 is present but not operational" 3
 echo "✅ udisks2"
 
+# strings
+! type -a strings &>/dev/null &&
+	die "🟠 strings (binutils) is missing and must be installed" 2
+echo "✅ strings"
+
 # zstd
 ! type -a zstd &>/dev/null &&
 	die "🟠 zstd is missing and must be installed" 2
