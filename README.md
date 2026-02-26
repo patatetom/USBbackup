@@ -1,4 +1,4 @@
-# 🍀 USBbackup : plug ⏬ && backup 🔁
+# USBbackup : ⏬ plug && backup 🔁
 **Simple user backup solution on USB storage device**
 
 USBbackup is a Linux `systemd` backup solution entirely in user space :
