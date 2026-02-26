@@ -3,8 +3,8 @@
 
 # this tar module (script) is intended for the USBbackup@.sh script
 # backup restoration can be done with the command:
-# cat /path/to/USBbackup/{HOSTNAME}/{USER}/USBbackup.tar.zst-* |
-# tar -C /tmp/ -xv [...]
+# cat /path/to/USBbackup/tar/{HOSTNAME}/{USER}/USBbackup.tar.zst-* |
+# tar --directory=/tmp/ --extract [...]
 # !! tar backups are NOT encrypted !!
 
 
@@ -12,7 +12,7 @@ target="$backup/tar/$HOSTNAME/$USER"
 
 
 # create target directory and test write access
-mkdir -p "$target"
+mkdir --parents "$target"
 ! touch "$target/.test" &&
 	notify-send \
 		--urgency=critical \
@@ -40,8 +40,9 @@ find ~ -type f -size -$((1024*1024*1024))c -print0 |
 tar \
 	--exclude "$HOME/.cache" \
 	--exclude "$HOME/.local/share" \
-	--null -T- --zstd -c |
-split -d -a 4 -b 4G - "$target/USBbackup.tar.zst-"
+	--null --files-from=- \
+	--zstd --create |
+split --numeric-suffixes --suffix-length=4 --bytes=4G - "$target/USBbackup.tar.zst-"
 (( $? != 0 )) &&
 	notify-send \
 		--urgency=critical \
@@ -70,7 +71,7 @@ notify-send \
 	"Verifying backup (2/2)..."
 set -o pipefail
 cat "$target/USBbackup.tar.zst-"* |
-tar --zstd -t > /dev/null
+tar --zstd --list > /dev/null
 (( $? != 0 )) &&
 	notify-send \
 		--urgency=critical \

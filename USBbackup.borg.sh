@@ -7,7 +7,7 @@
 # https://github.com/loomi-labs/arco
 # https://github.com/karanhudia/borg-ui
 # https://github.com/borgbase/vorta
-# !! the borg repository (the backups) is NOT encrypted !!
+# !! borg repository (backups) is NOT encrypted !!
 
 
 target="$backup/borg/$HOSTNAME/$USER"
@@ -18,7 +18,7 @@ export BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK=yes
 
 
 # create target directory and test write access
-mkdir -p "$target"
+mkdir --parents "$target"
 ! touch "$target/.test" &&
 	notify-send \
 		--urgency=critical \
@@ -53,9 +53,9 @@ notify-send \
 # additional exclusions can be added in the grep (-e ...)
 set -o pipefail
 find ~ -type f -size -$((1024*1024*1024))c |
-grep -v \
-	-e "^$HOME/.cache" \
-	-e "^$HOME/.local/share" |
+grep --invert-match \
+	--regexp="^$HOME/.cache" \
+	--regexp="^$HOME/.local/share" |
 borg create --compression zstd --paths-from-stdin "$target::{now:%Y%m%d%H%M}"
 (( $? != 0 )) &&
 	notify-send \

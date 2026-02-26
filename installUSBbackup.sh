@@ -1,17 +1,17 @@
 #!/usr/bin/bash
 
-set -eu
+set -e -u
 
 # message
 echo
 echo "This script will install USBbackup into your environment if all required conditions are met."
-read -rsp "Press [Enter] to continue or [Ctrl]-[C] to cancel"$'\n'
+read -r -s -p "Press [Enter] to continue or [Ctrl]-[C] to cancel"$'\n'
 echo
 
 die() { echo "$1"$'\n' >&2; exit ${2:-1}; }
 
 # systemd
-init="$( ps -p 1 -o comm= 2>/dev/null )"
+init="$( ps --pid 1 --format comm= 2>/dev/null )"
 [[ "$init" != "systemd" ]] &&
 	die "🔴 systemd is not the system's INIT"
 echo "✅ systemd"
@@ -30,7 +30,10 @@ echo "✅ base64"
 ! type -a notify-send &>/dev/null &&
 	die "🟠 notify-send (libnotify-bin) is missing and must be installed" 2
 # check notify-send version against 0.7.11
-IFS='.' read x y z <<< $( notify-send --version | grep -E -o '[0-9]+\.[0-9]+\.[0-9]+' )
+IFS='.' read -r x y z <<< $(
+	notify-send --version |
+	grep --extended-regexp --only-matching '[0-9]+\.[0-9]+\.[0-9]+'
+)
 version=$(( 10#${x:-0} * 10000 + 10#${y:-0} * 100 + 10#${z:-0} ))
 (( version < 711 )) &&
 	echo "🟡 notify-send (<0.7.11 2022)" ||
@@ -62,16 +65,16 @@ type -a rsync &>/dev/null &&
 # message
 echo
 echo "Proceed with installing USBbackup into your environment?"
-read -rsp "Press [Enter] to continue or [Ctrl]-[C] to cancel"$'\n'
+read -r -s -p "Press [Enter] to continue or [Ctrl]-[C] to cancel"$'\n'
 echo
 
 # install files
 echo "Copying files..."
-mkdir -p -v ~/.config/systemd/user/
-cp -v ./USBbackup*.service ~/.config/systemd/user/
+mkdir --parents --verbose ~/.config/systemd/user/
+cp --verbose ./USBbackup*.service ~/.config/systemd/user/
 chmod -x ~/.config/systemd/user/USBbackup*.service
-mkdir -p -v ~/.local/bin/
-cp -v ./USBbackup*.sh ~/.local/bin/
+mkdir --parents --verbose ~/.local/bin/
+cp --verbose ./USBbackup*.sh ~/.local/bin/
 chmod -x ~/.local/bin/USBbackup*.sh
 echo
 
@@ -79,7 +82,7 @@ echo
 
 # remove `action` option if notify-send < 0.7.11
 (( version < 711 )) &&
-sed -i '/^[[:space:]]*--action="/d' ~/.local/bin/USBbackup@.sh
+sed --in-place '/^[[:space:]]*--action="/d' ~/.local/bin/USBbackup@.sh
 
 # install user service
 echo "Installing and starting the service..."

@@ -5,7 +5,7 @@
 [ -z "$1" ] &&
 	echo "$0 requires a parameter" >&2 &&
 		exit 1
-backup=$( base64 -d <<< "$1")
+backup=$( base64 --decode <<< "$1")
 [ ! -d "$backup" ] &&
 	echo "directory $backup does not exist" >&2 &&
 		exit 1

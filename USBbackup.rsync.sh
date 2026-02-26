@@ -9,7 +9,7 @@ target="$backup/rsync/$HOSTNAME/$USER"
 
 
 # create target directory and test write access
-mkdir -p "$target"
+mkdir --parents "$target"
 ! touch "$target/.test" &&
 	notify-send \
 		--urgency=critical \
