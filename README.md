@@ -130,4 +130,4 @@ Unlike `tar` and `borg`, `rsync` does not use compressed container(s) to store f
 ## ⚗️ `etc…` backup
 
 Using scripts provided as inspiration, you can easily set up your own backup solution based on tool of your choice.
-You can also modify script provided for your chosen solution to reconfigure backup (exclusions, max file size to be considered, etc…).
+You can also modify script provided for your chosen solution to reconfigure backup (exclusions, max file size to be considered, encryption, etc…).
