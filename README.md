@@ -30,9 +30,9 @@ Press [Enter] to continue or [Ctrl]-[C] to cancel
 ✅ zstd
 ✅ base64
 ✅ notify-send
+🟡 rsync is missing and must be installed if used
 ✅ tar
 🟡 borg (borgbackup) is missing and must be installed if used
-🟡 rsync is missing and must be installed if used
 
 Proceed with installing USBbackup into your environment ?
 Press [Enter] to continue or [Ctrl]-[C] to cancel

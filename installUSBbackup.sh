@@ -41,26 +41,27 @@ version=$(( 10#${x:-0} * 10000 + 10#${y:-0} * 100 + 10#${z:-0} ))
 
 flag=""
 
+# rsync
+type -a rsync &>/dev/null &&
+	echo "✅ rsync" &&
+		flag="rsync" ||
+	echo "🟡 rsync is missing and must be installed if used"
+
 # tar
 type -a tar &>/dev/null &&
 	echo "✅ tar" &&
-		flag="x" ||
+		flag="tar" ||
 	echo "🟡 tar is missing and must be installed if used"
 
 # borg (borgbackup)
 type -a borg &>/dev/null &&
 	echo "✅ borg" &&
-		flag="x" ||
+		flag="borg" ||
 	echo "🟡 borg (borgbackup) is missing and must be installed if used"
 
-# rsync
-type -a rsync &>/dev/null &&
-	echo "✅ rsync" &&
-		flag="x" ||
-	echo "🟡 rsync is missing and must be installed if used"
-
+# no tool available
 [[ -z "${flag}" ]] &&
-	die "🟠 none of the three required tools are present" 2
+	die "🟠 none of the three required tools is present" 2
 
 # message
 echo
@@ -78,11 +79,23 @@ cp --verbose ./USBbackup*.sh ~/.local/bin/
 chmod -x ~/.local/bin/USBbackup*.sh
 echo
 
-# TODO set default backup solution with flag...
-
 # remove `action` option if notify-send < 0.7.11
 (( version < 711 )) &&
-sed --in-place '/^[[:space:]]*--action="/d' ~/.local/bin/USBbackup@.sh
+	sed --in-place \
+		'/^[[:space:]]*--action="/d' \
+		~/.local/bin/USBbackup@.sh
+
+# set backup solution
+[ "$flag" == "rsync" ] &&
+	sed --regexp-extended \
+		--expression='s/^(source .*USBbackup.tar)/#\1/' \
+		--expression='s/^#(source .*USBbackup.rsync)/\1/' \
+		~/.local/bin/USBbackup@.sh
+[ "$flag" == "borg" ] &&
+	sed --regexp-extended \
+		--expression='s/^(source .*USBbackup.tar)/#\1/' \
+		--expression='s/^#(source .*USBbackup.borg)/\1/' \
+		~/.local/bin/USBbackup@.sh
 
 # install user service
 echo "Installing and starting the service..."
