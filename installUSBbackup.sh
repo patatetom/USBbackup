@@ -87,12 +87,12 @@ echo
 
 # set backup solution
 [ "$flag" == "rsync" ] &&
-	sed --regexp-extended \
+	sed --in-place --regexp-extended \
 		--expression='s/^(source .*USBbackup.tar)/#\1/' \
 		--expression='s/^#(source .*USBbackup.rsync)/\1/' \
 		~/.local/bin/USBbackup@.sh
 [ "$flag" == "borg" ] &&
-	sed --regexp-extended \
+	sed --in-place --regexp-extended \
 		--expression='s/^(source .*USBbackup.tar)/#\1/' \
 		--expression='s/^#(source .*USBbackup.borg)/\1/' \
 		~/.local/bin/USBbackup@.sh
