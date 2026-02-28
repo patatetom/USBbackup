@@ -81,6 +81,7 @@ USBbackup with `rsync` :
 source ~/.local/bin/USBbackup.rsync.sh
 ```
 
+> `borg` will be preferred to `tar` if it is already installed on the system.
 > Using multiple modules is possible but will necessarily require more time and more space on your USB storage device.
 
 
