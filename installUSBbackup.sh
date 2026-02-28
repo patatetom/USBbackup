@@ -75,7 +75,7 @@ mkdir --parents --verbose ~/.config/systemd/user/
 cp --verbose ./USBbackup*.service ~/.config/systemd/user/
 chmod -x ~/.config/systemd/user/USBbackup*.service
 mkdir --parents --verbose ~/.local/bin/
-cp --verbose ./USBbackup*.sh ~/.local/bin/
+cp --verbose --backup ./USBbackup*.sh ~/.local/bin/
 chmod -x ~/.local/bin/USBbackup*.sh
 echo
 
