@@ -23,7 +23,6 @@ rm "$target/.test"
 
 
 # tar backup
-# TODO check target fs to split or not
 notify-send \
 	--urgency=normal \
 	--app-name="Personal data tar backup" \
@@ -42,7 +41,14 @@ tar \
 	--exclude "$HOME/.local/share" \
 	--null --files-from=- \
 	--zstd --create |
-split --numeric-suffixes --suffix-length=4 --bytes=4G - "$target/USBbackup.tar.zst-"
+(
+# get filesystem type to split (vfat) or not
+fs=$( findmnt --noheadings --output FSTYPE "$target" )
+if [ "$fs" == "vfat" ]
+then split --numeric-suffixes --suffix-length=4 --bytes=4G - "$target/USBbackup.tar.zst-"
+else cat > "$target/USBbackup.tar.zst"
+fi
+)
 (( $? != 0 )) &&
 	notify-send \
 		--urgency=critical \
