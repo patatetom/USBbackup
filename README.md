@@ -11,7 +11,7 @@ once installed, any USB storage device containing a folder named `USBbackup/` at
 
 
 
-## 📎 Installation
+## ⚙️ Installation
 
 - [Download](https://github.com/patatetom/USBbackup/archive/refs/heads/main.zip) the USBbackup ZIP archive
 - Extract the contents of the archive
@@ -60,7 +60,7 @@ The command must be preceded by `sudo` in order to temporarily elevate privilege
 
 
 
-## ⚙️ Configuration
+## 🎚️ Configuration
 
 USBbackup use `tar` by default, but if you prefer to use `borg` or `rsync`, you must modify the USBbackup configuration.
 
